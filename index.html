@@ -20,7 +20,7 @@
     <div class="header-top">
       <div class="brand">
         <div class="brand-name">📚 우리 반 학습공간</div>
-        <div class="brand-sub" id="classLabel">2학년 4반</div>
+        <div class="brand-sub" id="classLabel">2학년 3반</div>
       </div>
       <div class="today-pill" id="todayPill">–</div>
     </div>
@@ -91,9 +91,6 @@
       <div class="ab-text">관리자(회장·담임 선생님)는 로그인 후<br>일정·공지·학습자료를 관리할 수 있어요.<br>일반 학생은 읽기 전용으로 이용합니다.</div>
       <button class="btn-primary" onclick="showToast('실제 서비스에서는 Supabase 로그인이 연결됩니다')">👑 관리자 로그인</button>
     </div>
-    <a class="more-row" href="https://our-class-grade-calculator.heungsun.chatgpt.site/" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
-      <div><div class="mr-label">📊 흥덕중 2-4반 내신계산기</div><div class="mr-sub">나의 예상 성취도 확인으로 내신관리를 할 수 있어요</div></div><span>›</span>
-    </a>
     <div class="more-row"><div><div class="mr-label">🔔 알림 설정</div><div class="mr-sub">마감 알림 기능은 추후 제공될 예정이에요</div></div><span>›</span></div>
     <div class="more-row"><div><div class="mr-label">ℹ️ 앱 정보</div><div class="mr-sub">우리 반 학습공간 · 데모 버전</div></div><span>›</span></div>
     <div class="more-row"><div><div class="mr-label">📴 오프라인 안내</div><div class="mr-sub">인터넷이 끊겨도 최근 화면은 볼 수 있어요</div></div><span>›</span></div>
@@ -105,6 +102,7 @@
       <button class="nav-btn" data-page="schedule" onclick="goPage('schedule')"><span class="ni">🗓️</span><span class="nl">일정</span></button>
       <button class="nav-btn" data-page="notice" onclick="goPage('notice')"><span class="ni">📢</span><span class="nl">공지</span></button>
       <button class="nav-btn" data-page="study" onclick="goPage('study')"><span class="ni">📚</span><span class="nl">학습</span></button>
+      <button class="nav-btn" data-page="calc" onclick="window.open('https://our-class-grade-calculator.heungsun.chatgpt.site/','_blank')"><span class="ni">🖩</span><span class="nl">내신계산기</span></button>
       <button class="nav-btn" data-page="more" onclick="goPage('more')"><span class="ni">👤</span><span class="nl">더보기</span></button>
     </div>
   </div>
