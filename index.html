@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#3B7CF6">
+<title>우리 반 학습공간</title>
+
+<!-- manifest.json / service-worker.js 는 STEP 3(PWA)에서 추가됩니다 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <div class="header" id="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-name">📚 우리 반 학습공간</div>
+        <div class="brand-sub" id="classLabel">2학년 3반</div>
+      </div>
+      <div class="today-pill" id="todayPill">–</div>
+    </div>
+  </div>
+
+  <!-- 홈 -->
+  <div class="page active" id="page-home">
+    <span class="badge-testdata" id="testDataBadge">🧪 테스트 데이터로 표시 중 (Supabase 미설정)</span>
+    <div class="today-card" id="todayCard"></div>
+
+    <div class="section-title"><h2>🗓️ 월간 달력</h2></div>
+    <div class="cal-nav">
+      <button onclick="shiftMonth(-1)">‹</button>
+      <div class="cal-month" id="calMonthLabel"></div>
+      <button onclick="shiftMonth(1)">›</button>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-weekday-row"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div>
+      <div class="cal-days" id="calDays"></div>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--blue)"></i>수행평가</span>
+      <span><i style="background:var(--red)"></i>지필고사</span>
+      <span><i style="background:var(--green)"></i>숙제</span>
+      <span><i style="background:var(--orange)"></i>공지</span>
+      <span><i style="background:var(--purple)"></i>학사일정</span>
+      <span><i style="background:var(--yellow)"></i>기타</span>
+    </div>
+  </div>
+
+  <!-- 일정 -->
+  <div class="page" id="page-schedule">
+    <div class="section-title" style="margin-top:14px;"><h2>📆 주간 플래너</h2></div>
+    <div class="week-nav">
+      <button onclick="shiftWeek(-1)">‹</button>
+      <div class="week-range" id="weekRangeLabel"></div>
+      <button onclick="shiftWeek(1)">›</button>
+    </div>
+    <div id="weekList"></div>
+
+    <div class="section-title"><h2>전체 일정</h2></div>
+    <div class="filter-row" id="filterRow"></div>
+    <div id="scheduleList"></div>
+  </div>
+
+  <!-- 공지 -->
+  <div class="page" id="page-notice">
+    <div class="section-title" style="margin-top:14px;"><h2>📢 공지사항</h2></div>
+    <div id="noticeList"></div>
+  </div>
+
+  <!-- 학습 -->
+  <div class="page" id="page-study">
+    <div class="section-title" style="margin-top:14px;"><h2>📚 학습도우미</h2></div>
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" id="materialSearch" placeholder="과목, 제목, 내용으로 검색" oninput="renderMaterials()">
+    </div>
+    <div class="filter-row" id="materialFilterRow"></div>
+    <div id="materialList"></div>
+  </div>
+
+  <!-- 더보기 -->
+  <div class="page" id="page-more">
+    <div class="section-title" style="margin-top:14px;"><h2>👤 더보기</h2></div>
+    <div class="admin-banner">
+      <div class="ab-icon">👑</div>
+      <div class="ab-text">관리자(회장·담임 선생님)는 로그인 후<br>일정·공지·학습자료를 관리할 수 있어요.<br>일반 학생은 읽기 전용으로 이용합니다.</div>
+      <button class="btn-primary" onclick="showToast('실제 서비스에서는 Supabase 로그인이 연결됩니다')">👑 관리자 로그인</button>
+    </div>
+    <div class="more-row"><div><div class="mr-label">🔔 알림 설정</div><div class="mr-sub">마감 알림 기능은 추후 제공될 예정이에요</div></div><span>›</span></div>
+    <div class="more-row"><div><div class="mr-label">ℹ️ 앱 정보</div><div class="mr-sub">우리 반 학습공간 · 데모 버전</div></div><span>›</span></div>
+    <div class="more-row"><div><div class="mr-label">📴 오프라인 안내</div><div class="mr-sub">인터넷이 끊겨도 최근 화면은 볼 수 있어요</div></div><span>›</span></div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <button class="nav-btn active" data-page="home" onclick="goPage('home')"><span class="ni">🏠</span><span class="nl">홈</span></button>
+      <button class="nav-btn" data-page="schedule" onclick="goPage('schedule')"><span class="ni">🗓️</span><span class="nl">일정</span></button>
+      <button class="nav-btn" data-page="notice" onclick="goPage('notice')"><span class="ni">📢</span><span class="nl">공지</span></button>
+      <button class="nav-btn" data-page="study" onclick="goPage('study')"><span class="ni">📚</span><span class="nl">학습</span></button>
+      <button class="nav-btn" data-page="more" onclick="goPage('more')"><span class="ni">👤</span><span class="nl">더보기</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this) closeSheet()">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+
+
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<!-- Supabase 설정 + 데이터 함수 -->
+<script src="supabase.js"></script>
+<!-- 화면 로직 -->
+<script src="app.js"></script>
+
+</body>
+</html>
